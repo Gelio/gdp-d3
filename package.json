@@ -4,7 +4,8 @@
   "description": "US's GDP visualised",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack",
+    "dev": "webpack-dev-server -w --inline --hot"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,18 @@
   },
   "homepage": "https://github.com/Gelio/gdp-d3#readme",
   "dependencies": {
-    "d3": "^3.5.14"
+    "bootstrap": "^4.0.0-alpha.2",
+    "d3": "^3.5.14",
+    "jquery": "^2.2.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "node-sass": "^3.4.2",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
   }
 }
