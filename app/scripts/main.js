@@ -1,6 +1,7 @@
 (function() {
     var d3 = require('d3'),
-        $ = require('jquery');
+        $ = require('jquery'),
+        months = require('./months.js');
 
     $(document).ready(function() {
         $('.currYear').html(new Date().getFullYear());
@@ -19,7 +20,6 @@
     }
 
     function downloadCompleted(data) {
-
         var chartData = data.data;
 
         var height = 580,
@@ -38,21 +38,30 @@
                 .domain(chartData.map(function(d) { return d[0];}))
                 .rangeRoundBands([0, width], 0.1);
 
-        console.log(chartData.map(function(d) { return d[0];}));
         var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient('bottom')
-            .tickValues(x.domain().filter(function(d, i) { return !(i % 30);}));
+                .scale(x)
+                .orient('bottom')
+                .tickValues(x.domain().filter(function(d, i) { return !(i % 30);})),
+            yAxis = d3.svg.axis()
+                .scale(y)
+                .orient('left');
 
         chart.attr('width', width + margins.left + 'px')
             .attr('height', height + margins.bottom + 'px');
 
         var innerChart = chart.append('g').attr('transform', 'translate(' + margins.left + ', 0)');
 
-        /*innerChart.append('g')
+        chart.append('g')
+            .attr('transform', 'translate(' + margins.left * 3 + ', 0)')
+            .attr('class', 'y axis')
+            .call(yAxis);
+
+        chart.append('g')
+            .attr('transform', 'translate(' + margins.left + ', 0)')
+            .append('g')
             .attr('class', 'x axis')
             .attr('transform', 'translate(0, ' + (height + 1) + ')')
-            .call(xAxis);*/
+            .call(xAxis);
 
         innerChart.selectAll('g')
             .data(chartData)
@@ -81,10 +90,14 @@
     function displayTooltip(d) {
         //var mousePosition = d3.mouse(d3.select('.chart').node());
         var mousePosition = [ d3.event.pageX, d3.event.pageY ];
-        d3.select('.chart-tooltip')
+        var tooltip = d3.select('.chart-tooltip')
             .classed('visible', true)
             .style('left', (mousePosition[0] - 10) + 'px')
-            .style('top', (mousePosition[1] + 15) + 'px')
-            .text(d[0] + ' - ' + d[1]);
+            .style('top', (mousePosition[1] + 15) + 'px');
+
+        var parsedDate = d[0].match(/(\d{4})-(\d{2})-(\d{2})/);
+
+        tooltip.select('.date').text(months[Number(parsedDate[2])] + ' ' + parsedDate[1]);
+        tooltip.select('.value').text(d[1]);
     }
 })();
