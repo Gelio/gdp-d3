@@ -31,7 +31,7 @@
 
         var x = d3.scale.ordinal()
             .domain(chartData.map(function(d) { return d[1];}))
-            .rangeRoundBands([0, 10000], 0.01);
+            .rangeRoundBands([0, 9500], 0.01);
 
         chart.attr('width', '100%')
             .attr('height', height + 'px');
@@ -39,7 +39,7 @@
         chart.selectAll('g')
             .data(chartData)
             .enter().append('rect')
-            .attr('x', function(d) { return (x(d[1])/100 + '%');})
+            .attr('x', function(d) { return (x(d[1])/100 + 5 + '%');})
             .attr('y', function(d) { return (90 - y(d[1])) + '%';})
             .attr('width', x.rangeBand()/100 + '%')
             .attr('height', function(d) { return y(d[1]) + '%'})
