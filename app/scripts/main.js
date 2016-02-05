@@ -27,11 +27,14 @@
         var chart = d3.select('.chart'),
             y = d3.scale.linear()
                 .domain([0, d3.max(chartData, function(d) { return d[1];})])
-                .range([0, 90]);
+                .range([0, 90]),
+            x = d3.scale.ordinal()
+                .domain(chartData.map(function(d) { return d[1];}))
+                .rangeRoundBands([0, 9500], 0.01);
 
-        var x = d3.scale.ordinal()
-            .domain(chartData.map(function(d) { return d[1];}))
-            .rangeRoundBands([0, 9500], 0.01);
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient('bottom');
 
         chart.attr('width', '100%')
             .attr('height', height + 'px');
@@ -46,6 +49,11 @@
             .on('mouseover', highlightBar)
             .on('mouseout', removeHighlightAndTooltip)
             .on('mousemove', displayTooltip);
+
+        chart.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0, ' + height + ')')
+            .call(xAxis);
     }
 
     function highlightBar() {
