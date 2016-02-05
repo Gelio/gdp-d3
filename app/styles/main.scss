@@ -1,1 +1,22 @@
 // Import all other stylesheets
+
+.chart {
+  width: 100%;
+}
+
+// SVG styles
+.chart g.highlighted {
+  rect {
+    fill: #57a1b4;
+  }
+}
+
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
