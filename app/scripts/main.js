@@ -27,8 +27,11 @@
 
         var chartData = data.data;
 
-        var width = 420,
-            barHeight = 2;
+        var height = 600,
+            barWidth = 100/chartData.length;
+
+        if(barWidth < 0)
+            barWidth = 0.1;
 
         // Render data on the page
         var chart = d3.select('.chart'),
@@ -37,25 +40,18 @@
                 .range([0, 100]);
 
         chart.attr('width', '100%')
-            .attr('height', barHeight * chartData.length + 'px');
+            .attr('height', height + 'px');
 
-        var bar = chart.selectAll('g')
+        chart.selectAll('g')
             .data(chartData)
-            .enter().append('g')
-            .attr('transform', function(d, i) { return 'translate(0, ' + i * barHeight + ')'; })
+            .enter().append('rect')
+            .attr('x', function(d, i) { return i/chartData.length*100 + '%';})
+            .attr('y', function(d) { return (100 - x(d[1])) + '%';})
+            .attr('width', barWidth + '%')
+            .attr('height', function(d) { return x(d[1]) + '%'})
             .on('mouseover', highlightBar)
             .on('mouseout', removeHighlightAndTooltip)
             .on('mousemove', displayTooltip);
-
-        bar.append('rect')
-            .attr('width', function(d) { return x(d[1]) + '%'})
-            .attr('height', barHeight-1);
-
-        /*bar.append('text')
-            .attr('x', function(d) { return (x(d[1]) - 0.5) + '%'; })
-            .attr('y', barHeight/2)
-            .attr('dy', '.35em')
-            .text(function(d) { return d[0] + ' - ' + d[1]});*/
     }
 
     function highlightBar() {

@@ -22,10 +22,8 @@
 }
 
 // SVG styles
-.chart g.highlighted {
-  rect {
-    fill: #57a1b4;
-  }
+.chart rect.highlighted {
+  fill: #57a1b4;
 }
 
 .chart rect {
