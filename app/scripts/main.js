@@ -19,11 +19,6 @@
     }
 
     function downloadCompleted(data) {
-        $('.chart').html('Data was fetched from the server. It\'s now processed and will be displayed shortly.');
-
-        // Refactor that into one loop for more efficiency
-        /*var periods = data.data.map(function(currData) { return currData[0]}),
-            values = data.data.map(function(currData) { return currData[1]});*/
 
         var chartData = data.data;
 
@@ -35,9 +30,15 @@
 
         // Render data on the page
         var chart = d3.select('.chart'),
-            x = d3.scale.linear()
+            y = d3.scale.linear()
                 .domain([0, d3.max(chartData, function(d) { return d[1];})])
                 .range([0, 100]);
+
+        var x = d3.scale.ordinal()
+            .domain(chartData.map(function(d) { return d[1];}))
+            .rangeRoundBands([0, 10000], 0.1);
+
+        console.log(x(10701.3), x('2001-10-01'));
 
         chart.attr('width', '100%')
             .attr('height', height + 'px');
@@ -45,10 +46,10 @@
         chart.selectAll('g')
             .data(chartData)
             .enter().append('rect')
-            .attr('x', function(d, i) { return i/chartData.length*100 + '%';})
-            .attr('y', function(d) { return (100 - x(d[1])) + '%';})
-            .attr('width', barWidth + '%')
-            .attr('height', function(d) { return x(d[1]) + '%'})
+            .attr('x', function(d, i) { return (x(d[1])/100 + '%');})//{ return i/chartData.length*100 + '%';})
+            .attr('y', function(d) { return (100 - y(d[1])) + '%';})
+            .attr('width', x.rangeBand()/100 + '%')
+            .attr('height', function(d) { return y(d[1]) + '%'})
             .on('mouseover', highlightBar)
             .on('mouseout', removeHighlightAndTooltip)
             .on('mousemove', displayTooltip);
