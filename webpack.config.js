@@ -16,8 +16,8 @@ module.exports = {
             // Add linters
         ],
         loaders: [
-            {test: /\.css$/, loader: ExtractTextPlugin.extract([ 'css-loader?sourceMap'])},
-            {test: /\.scss$/, loader: ExtractTextPlugin.extract(['css-loader?sourceMap', 'sass-loader?sourceMap']), exclude: /node_modules/},
+            {test: /\.css$/, loader: ExtractTextPlugin.extract([ 'css-loader?sourceMap', 'autoprefixer'])},
+            {test: /\.scss$/, loader: ExtractTextPlugin.extract(['css-loader?sourceMap', 'autoprefixer', 'sass-loader?sourceMap']), exclude: /node_modules/},
             {test: /\.html$/, loader: 'raw'}
         ]
     },

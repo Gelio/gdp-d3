@@ -4,5 +4,8 @@ var d3 = require('d3'),
 $(document).ready(function() {
     $('.currYear').html(new Date().getFullYear());
 
+    $.ajax('GDP-data.json', {
+
+    })
     // Begin downloading
 });
