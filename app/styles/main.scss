@@ -17,10 +17,6 @@
   }
 }
 
-.chart {
-  width: 100%;
-}
-
 // SVG styles
 .chart rect.highlighted {
   fill: #57a1b4;
@@ -31,7 +27,7 @@
 }
 
 .chart text {
-  fill: white;
+  fill: black;
   font: 10px sans-serif;
   text-anchor: end;
 }

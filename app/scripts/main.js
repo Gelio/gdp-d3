@@ -22,38 +22,48 @@
 
         var chartData = data.data;
 
-        var height = 600;
+        var height = 580,
+            width = 980;
+
+        var margins = {
+            bottom: 20,
+            left: 20
+        };
 
         var chart = d3.select('.chart'),
             y = d3.scale.linear()
                 .domain([0, d3.max(chartData, function(d) { return d[1];})])
-                .range([0, 90]),
+                .range([height, 0]),
             x = d3.scale.ordinal()
-                .domain(chartData.map(function(d) { return d[1];}))
-                .rangeRoundBands([0, 9500], 0.01);
+                .domain(chartData.map(function(d) { return d[0];}))
+                .rangeRoundBands([0, width], 0.1);
 
+        console.log(chartData.map(function(d) { return d[0];}));
         var xAxis = d3.svg.axis()
             .scale(x)
-            .orient('bottom');
+            .orient('bottom')
+            .tickValues(x.domain().filter(function(d, i) { return !(i % 30);}));
 
-        chart.attr('width', '100%')
-            .attr('height', height + 'px');
+        chart.attr('width', width + margins.left + 'px')
+            .attr('height', height + margins.bottom + 'px');
 
-        chart.selectAll('g')
+        var innerChart = chart.append('g').attr('transform', 'translate(' + margins.left + ', 0)');
+
+        /*innerChart.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0, ' + (height + 1) + ')')
+            .call(xAxis);*/
+
+        innerChart.selectAll('g')
             .data(chartData)
             .enter().append('rect')
-            .attr('x', function(d) { return (x(d[1])/100 + 5 + '%');})
-            .attr('y', function(d) { return (90 - y(d[1])) + '%';})
-            .attr('width', x.rangeBand()/100 + '%')
-            .attr('height', function(d) { return y(d[1]) + '%'})
+            .attr('x', function(d) { return x(d[0]) + 'px';})
+            .attr('y', function(d) { return (y(d[1])) + 'px';})
+            .attr('width', x.rangeBand() + 'px')
+            .attr('height', function(d) { return (height  - y(d[1])) + 'px'})
             .on('mouseover', highlightBar)
             .on('mouseout', removeHighlightAndTooltip)
             .on('mousemove', displayTooltip);
-
-        chart.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0, ' + height + ')')
-            .call(xAxis);
     }
 
     function highlightBar() {
