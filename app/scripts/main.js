@@ -22,23 +22,16 @@
 
         var chartData = data.data;
 
-        var height = 600,
-            barWidth = 100/chartData.length;
+        var height = 600;
 
-        if(barWidth < 0)
-            barWidth = 0.1;
-
-        // Render data on the page
         var chart = d3.select('.chart'),
             y = d3.scale.linear()
                 .domain([0, d3.max(chartData, function(d) { return d[1];})])
-                .range([0, 100]);
+                .range([0, 90]);
 
         var x = d3.scale.ordinal()
             .domain(chartData.map(function(d) { return d[1];}))
-            .rangeRoundBands([0, 10000], 0.1);
-
-        console.log(x(10701.3), x('2001-10-01'));
+            .rangeRoundBands([0, 10000], 0.01);
 
         chart.attr('width', '100%')
             .attr('height', height + 'px');
@@ -46,8 +39,8 @@
         chart.selectAll('g')
             .data(chartData)
             .enter().append('rect')
-            .attr('x', function(d, i) { return (x(d[1])/100 + '%');})//{ return i/chartData.length*100 + '%';})
-            .attr('y', function(d) { return (100 - y(d[1])) + '%';})
+            .attr('x', function(d) { return (x(d[1])/100 + '%');})
+            .attr('y', function(d) { return (90 - y(d[1])) + '%';})
             .attr('width', x.rangeBand()/100 + '%')
             .attr('height', function(d) { return y(d[1]) + '%'})
             .on('mouseover', highlightBar)
