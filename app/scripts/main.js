@@ -26,6 +26,7 @@
             values = data.data.map(function(currData) { return currData[1]});*/
 
         var chartData = data.data;
+        chartData = chartData.slice(0, 20);
 
         var width = 420,
             barHeight = 20;
@@ -44,8 +45,8 @@
             .enter().append('g')
             .attr('transform', function(d, i) { return 'translate(0, ' + i * barHeight + ')'; })
             .on('mouseover', highlightBar)
-            .on('mouseout', removeHighlightAndTooltip);
-            //.on('mousemove', displayTooltip);
+            .on('mouseout', removeHighlightAndTooltip)
+            .on('mousemove', displayTooltip);
 
         bar.append('rect')
             .attr('width', function(d) { return x(d[1]) + '%'})
@@ -70,6 +71,18 @@
 
     function removeHighlightAndTooltip() {
         d3.select(this)
-            .classed('highlighted', false)
+            .classed('highlighted', false);
+        d3.select('.chart-tooltip')
+            .classed('visible', false);
+    }
+
+    function displayTooltip(d) {
+        //var mousePosition = d3.mouse(d3.select('.chart').node());
+        var mousePosition = [ d3.event.pageX, d3.event.pageY ];
+        d3.select('.chart-tooltip')
+            .classed('visible', true)
+            .style('left', (mousePosition[0] - 10) + 'px')
+            .style('top', (mousePosition[1] + 15) + 'px')
+            .text(d[0] + ' - ' + d[1]);
     }
 })();
